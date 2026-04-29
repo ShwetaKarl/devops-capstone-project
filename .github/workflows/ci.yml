@@ -1,16 +1,45 @@
+name: CI Pipeline
 
-Title: Need the ability to automate continuous integration checks
-**As a** Developer
-**I need** automation to build and test every pull request
-**So that** I do not have to rely on manual testing of each request, which is time-consuming
-#### Assumptions
-* GitHub Actions will be used for the automation workflow
-* The workflow must include code linting and testing 
-* The Docker image should be postgres:alpine for the database
-* A GitHub Actions badge should be added to the README.md to reflect the build status
-#### Acceptance Criteria
-Given code is ready to be merged
-When a pull request is created
-Then GitHub Actions should run linting and unit tests
-And the badge should show that the build is passing
-    
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install flake8 nose
+
+      - name: Run linting
+        run: flake8 .
+
+      - name: Run unit tests
+        run: nosetests

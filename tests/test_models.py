@@ -151,7 +151,6 @@ class TestAccount(unittest.TestCase):
         """It should Serialize an account"""
         account = AccountFactory()
         data = account.serialize()
-
         self.assertEqual(data["id"], 
         account.id)
         self.assertEqual(data["name"],

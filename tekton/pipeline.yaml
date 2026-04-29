@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: cd-pipeline
+
 spec:
   workspaces:
     - name: pipeline-workspace
@@ -10,6 +11,7 @@ spec:
     - name: repo-url
     - name: branch
       default: main
+    - name: build-image
 
   tasks:
     - name: clone
@@ -43,6 +45,19 @@ spec:
           value: "sqlite:///test.db"
         - name: args
           value: "-v --with-spec --spec-color"
+      workspaces:
+        - name: source
+          workspace: pipeline-workspace
+
+    - name: build
+      runAfter:
+        - tests
+      taskRef:
+        name: buildah
+        kind: ClusterTask
+      params:
+        - name: IMAGE
+          value: "$(params.build-image)"
       workspaces:
         - name: source
           workspace: pipeline-workspace

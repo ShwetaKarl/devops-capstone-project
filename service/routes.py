@@ -56,12 +56,7 @@ def create_accounts():
     return make_response(
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
     )
-<<<<<<< HEAD
-    
-=======
 
-
->>>>>>> b26b91c (completed ci build5)
 ######################################################################
 # LIST ALL ACCOUNTS
 ######################################################################

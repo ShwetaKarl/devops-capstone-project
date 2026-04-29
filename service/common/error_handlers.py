@@ -31,19 +31,17 @@ def bad_request(error):
     )
 
 
-@app.errorhandler(status.HTTP_404_NOT_FOUND)
-def not_found(error):
-    """Handles resources not found with 404_NOT_FOUND"""
-    message = str(error)
-    app.logger.warning(message)
-    return (
-        jsonify(
-            status=status.HTTP_404_NOT_FOUND,
-            error="Not Found",
-            message=message,
-        ),
-        status.HTTP_404_NOT_FOUND,
-    )
+def test_serialize_an_account(self):
+    """It should Serialize an account"""
+    account = AccountFactory()
+    data = account.serialize()
+
+    self.assertEqual(data["id"], account.id)
+    self.assertEqual(data["name"], account.name)
+    self.assertEqual(data["email"], account.email)
+    self.assertEqual(data["address"], account.address)
+    self.assertEqual(data["phone_number"], account.phone_number)
+    self.assertEqual(data["date_joined"], str(account.date_joined))
 
 
 @app.errorhandler(status.HTTP_405_METHOD_NOT_ALLOWED)

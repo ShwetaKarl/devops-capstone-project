@@ -8,6 +8,7 @@ and SQL database
 import sys
 from flask import Flask
 from flask_talisman import Talisman
+from flask_cors import CORS
 
 from service import config
 from service.common import log_handlers
@@ -16,11 +17,15 @@ from service.common import log_handlers
 app = Flask(__name__)
 app.config.from_object(config)
 
-# Enable security headers using Talisman
+# Security headers (Talisman)
 talisman = Talisman(app, force_https=False)
-# Import routes and models
+
+# Import routes and models FIRST
 from service import routes, models  # noqa: F401 E402
 from service.common import error_handlers, cli_commands  # noqa: F401 E402
+
+# Enable CORS AFTER routes are registered (IMPORTANT FIX)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Initialize logging
 log_handlers.init_logging(app, "gunicorn.error")

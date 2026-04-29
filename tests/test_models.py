@@ -150,16 +150,16 @@ class TestAccount(unittest.TestCase):
         account.name)
 
     def test_serialize_an_account(self):
-    """It should Serialize an account"""
-    account = AccountFactory()
-    data = account.serialize()
+        """It should Serialize an account"""
+        account = AccountFactory()
+        data = account.serialize()
 
-    self.assertEqual(data["id"], account.id)
-    self.assertEqual(data["name"], account.name)
-    self.assertEqual(data["email"], account.email)
-    self.assertEqual(data["address"], account.address)
-    self.assertEqual(data["phone_number"], account.phone_number)
-    self.assertEqual(data["date_joined"], str(account.date_joined))
+        self.assertEqual(data["id"], account.id)
+        self.assertEqual(data["name"], account.name)
+        self.assertEqual(data["email"], account.email)
+        self.assertEqual(data["address"], account.address)
+        self.assertEqual(data["phone_number"], account.phone_number)
+        self.assertEqual(data["date_joined"], str(account.date_joined))
 
     def test_deserialize_an_account(self):
         """It should Deserialize an account"""

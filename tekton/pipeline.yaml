@@ -23,16 +23,16 @@ spec:
       taskRef:
         name: cleanup
 
-    - name: clone
+    - name: tests
       workspaces:
-        - name: output
-          workspace: pipeline-workspace          
+        - name: source
+          workspace: pipeline-workspace
       taskRef:
-        name: git-clone
+        name: nose
       params:
-      - name: url
-        value: $(params.repo-url)
-      - name: revision
-        value: $(params.branch)
+	    - name: database_uri
+		    value: "sqlite:///test.db"
+      - name: args
+        value: "-v --with-spec --spec-color"
       runAfter:
-        - init
+        - clone
